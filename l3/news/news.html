@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<title>Новости</title>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+	<link rel="stylesheet" href="news.css" type="text/css">
+</head>
+	<div class="head"><h1>Темник ЛР №3</h1></div>
+	<div>
+	    <div id="main" class="news"></div>
+	    <div class="news"><button id="button">еще</button></div>
+	</div>
+	<script>
+    var s = 6;
+	var l = 0;
+	$(function(){
+        $.getJSON('news.json', function(data) {
+            for(var i=l;i<s;i++){
+                $('#main').append("<p><table width='400px'><tr><th>" + 
+                data.news[i].title + "</th></tr><tr><td><img src='" + 
+                data.news[i].image + "'></td></tr><tr><td>" + 
+                data.news[i].text + "</td></tr></table></p>");
+               }
+        });
+    });
+    
+    $('#button').on('click', function() {
+        
+    $.getJSON('news.json', function(data) {
+            l=s;
+            s=s+5;
+            for(var i=l;i<s-1;i++){
+                $('#main').append("<p><table width='400px'><tr><th>" + 
+                data.news[i].title + "</th></tr><tr><td><img src='" + 
+                data.news[i].image + "'></td></tr><tr><td>" + 
+                data.news[i].text + "</td></tr></table></p>");
+                if(i>11){
+                    $("#button").remove();
+                }
+            }
+        });
+    });
+
+    </script>
+
+</body>
+</html>
