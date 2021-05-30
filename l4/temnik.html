@@ -66,11 +66,11 @@
 		</div>
 <div id="accordion">
         <h3>Уфа</h3>
-            <div></div>
+            <div>Уфа́ — город в России, столица Республики Башкортостан, административный центр Уфимского района, в состав которого не входит. Город республиканского значения, образует муниципальное образование город Уфа со статусом городского округа.</div>
         <h3>Казань</h3>
-            <div></div>
+            <div>Каза́нь — город в России, столица Республики Татарстан, крупный порт на левом берегу реки Волги при впадении в неё реки Казанки. Крупнейший по численности населения город в Приволжском федеральном округе и на реке Волге.</div>
         <h3>Москва</h3>
-            <div></div>
+            <div>Москва́ — столица России, город федерального значения, административный центр Центрального федерального округа и центр Московской области, в состав которой не входит. Крупнейший по численности населения город России и её субъект.</div>
 </div>
 
 <script>
@@ -82,14 +82,10 @@ $(function() {
 
     $.getJSON('temnik.json', function(data) {
         for (var i = 0; i < 2; i++) {
-            tit[i] = data.users[i].title;
-            img[i] = data.users[i].image;
-            pri[i] = data.users[i].text;
-
-            $('#comment').append("<p><table cellpadding='5' width='80%'>"+
-			"<tr><th>"+tit[i]+"</th></tr>"+
-            	"<tr><td>"+"<img src='" + img[i] + "'>"+"</div></td></tr>"+
-            	"<tr><td>"+"<button class='open_kypit' id='open_kypit" + i + "' value = '" + i + "'>Купить</button>"+"</td></tr></table></p>");
+            	tit[i] = data.users[i].title;
+            	img[i] = data.users[i].image;
+            	pri[i] = data.users[i].text;
+		$('#comment').append("<p><table cellpadding='5' width='80%'>"+"<tr><th>"+tit[i]+"</th></tr>"+"<tr><td>"+"<img src='" + img[i] + "'>"+"</div></td></tr>"+"<tr><td>"+"<button class='open_kypit' id='open_kypit" + i + "' value = '" + i + "'>Купить</button>"+"</td></tr></table></p>");
         }
     });
 
@@ -115,7 +111,6 @@ $(function() {
     });
     
     $("body").on('click', '.open_otvet', function() {
-
         console.log(rez);
         $("#price_rez").text(rez);
         $('#num_rez').text($('#num').val());
