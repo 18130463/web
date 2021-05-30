@@ -14,7 +14,7 @@
 	<div class="menu">
 		<div id="comment" class="comment"></div>
 	</div>
-	<!-- Окошко 1 -->
+	
 	<div id="kypit" title="Купить">
 		<table cellpadding="5" width="90%">
 			<tr>
@@ -88,8 +88,8 @@ $(function() {
 
             $('#comment').append("<p><table cellpadding='5' width='80%'>"+
 			"<tr><th>"+tit[i]+"</th></tr>"+
-            "<tr><td>"+"<img src='" + img[i] + "'>"+"</div></td></tr>"+
-            "<tr><td>"+"<button class='open_kypit' id='open_kypit" + i + "' value = '" + i + "'>Купить</button>"+"</td></tr></table></p>");
+            	"<tr><td>"+"<img src='" + img[i] + "'>"+"</div></td></tr>"+
+            	"<tr><td>"+"<button class='open_kypit' id='open_kypit" + i + "' value = '" + i + "'>Купить</button>"+"</td></tr></table></p>");
         }
     });
 
@@ -127,7 +127,6 @@ $(function() {
         $("#kypit").dialog("close");
         return false;
     });
-
 });
 
 $(function() {
