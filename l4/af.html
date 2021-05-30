@@ -1,0 +1,193 @@
+<html>
+
+<!-- заголовок -->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<title>Глушков А.В.</title>
+</head>
+
+<!-- страница -->
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+	<script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+	
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="af.css" type="text/css">
+
+	<!-- Страница -->
+	<div class="head">
+		<h1>ЛР4 Афиша</h1></div>
+	<div class="menu">
+	    <div class='sel'>
+	        
+				    
+                
+
+			
+			
+	        
+		</div>
+		<div id="main" class="main"></div>
+	</div>
+	<!-- Окошко 1 -->
+	<div id="dialog" title="Купить">
+		<table cellpadding="5" width="90%">
+			<tr>
+				<td colspan="2"><div id="titul"></div></td>
+			</tr><tr>
+				<td><label for="fio">Фамилия</label></td>
+				<td><input type="text" id="fio"></td>
+			</tr><tr>
+				<td><label for="city">Город</label><br>
+		        <td><input type="text" id="city"/>
+			</tr><tr>
+				<td><label for="date">Дата</label></td>
+				<td><input type="text" class="from-control" id="date"></td>
+			</tr><tr>
+				<td><label for="slider">Кол-во</label></td>
+				<td><input type="text" name="num" class="form-control" id="num" value='1'></td>
+			</tr><tr>
+				<td colspan="2"><div id="slider"></div></td>
+			</tr><tr>
+				<td><label for="display">Цена</label></td>
+				<td><input type="text" id="display"></td>
+			</tr>
+		</table>
+		<button class='opn' id='opn' value='1'>Оформить</button>
+	</div>
+
+	<!-- Окошко 2 -->
+	<div id="dialog1" title="Ваш заказ оформлен">
+		<table cellpadding="5" width="100%">
+			<tr>
+				<td><label for="text">Фамилия</label></td>
+				<td><div id="fio1"></td>
+			</tr><tr>
+				<td><label for="lang1">Город</label></td>
+				<td><div id="lang1"></td>
+			</tr><tr>
+				<td colspan="2"><div id="titul1"></div></td>
+			</tr><tr>
+				<td><label for="date">Дата</label>
+				<td><div id="date1"></td>
+			</tr><tr>
+				<td><label for="slider">Кол-во</label></td>
+				<td><div id="num1"></td>
+			</tr><tr>
+				<td><label for="display1">Итого:</label></td>
+				<td><div id="dis1"></td>
+			</tr>
+		</table>
+		<button class='close' id='close' value='1'>ОК</button>
+		</div>
+<div id="accordion">
+        <h3>Афиша по городам</h3>
+            <div></div>
+        <h3>Афиша по городам</h3>
+            <div></div>
+</div>
+
+<script>
+$(function() {
+    let tit = [];
+    let img = [];
+    let pri = [];
+    let cit = [];
+    var ut;
+    //Страница
+    $.getJSON('tov.json', function(data) {
+        for (var i = 0; i < 2; i++) {
+            tit[i] = data.users[i].title;
+            img[i] = data.users[i].image;
+            pri[i] = data.users[i].text;
+            cit[i] = data.users[i].city;
+            console.log(pri[i]);
+            $('#main').append("<p><table cellpadding='5' width='80%'>"+
+			"<tr><th>"+tit[i]+"</th></tr>"+
+            "<tr><td>"+"<img src='" + img[i] + "'>"+"</div></td></tr>"+
+            "<tr><td>"+"<button class='opener' id='opener" + i + "' value = '" + i + "'>Купить</button>"+"</td></tr></table></p>");
+        }
+    });
+    
+    //Окошко 1
+    $("#dialog").dialog();
+    
+    $("body").on('click', '.opener', function() {
+        console.log('here');
+        $("#dialog").dialog("open");
+        console.log(tit[1]);
+        //$("#dis1").val($("#display").val() * $("#num").val());
+        
+        $("#display").val(pri[$(this).val()]);
+        $('#titul').empty();
+        $('#titul').append(tit[$(this).val()]);
+        ut = ($("#display").val() * $("#num").val());
+        console.log(ut);
+        return false;
+    });
+    
+    $("#dialog1").dialog();
+    
+    $(".opn").on('click', function() {
+        $("#dialog1").dialog("open");
+    });
+    
+    $(".close").on('click', function() {
+        $("#dialog1").dialog("close");
+    });
+    
+    $("body").on('click', '.opn', function() {
+
+         console.log(ut);
+        $("#dis1").text(ut);
+        $('#fio1').text($('#fio').val());
+        $('#titul1').text(tit[$(this).val()]);
+        $('#date1').text($('#date').val());
+        $('#num1').text($('#num').val());
+        $('#lang1').text($('#city').val());
+        $("#dialog").dialog("close");
+        return false;
+    });
+});
+$(function() {
+    $('#city').autocomplete({
+        source: ['Москва', 'Уфа', 'Казань', "Ростов", "Санкт Петербург", "Екатеринбург", "Пермь", "Новосибирск", "Омск"]
+    });
+});
+
+$("#date").datepicker({
+    minDate: 0,
+});
+
+$(function() {
+    $('#slider').slider({
+        range: "min",
+        min: 1,
+        max: 10,
+        step: 1,
+        values: [1],
+        slide: function(event, ui) {
+            $('#num').val(ui.values[0]);
+            $("#display1").val(($("#display").val()) * ($('#num').val()));
+        }
+    });
+});
+
+ $("#dialog2").dialog();
+    
+    $(".aco").on('click', function() {
+        $("#dialog2").dialog("open");
+    });
+
+$(function() {
+	$("#accordion").accordion({
+		collapsible: true
+	});
+});
+</script>
+</body>
+</html>

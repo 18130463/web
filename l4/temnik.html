@@ -1,0 +1,159 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Афиша</title>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="temnik.css" type="text/css">
+
+	<div class="head">
+		<h1>Темник</h1></div>
+	<div class="menu">
+		<div id="comment" class="comment"></div>
+	</div>
+	<!-- Окошко 1 -->
+	<div id="kypit" title="Купить">
+		<table cellpadding="5" width="90%">
+			<tr>
+				<td colspan="2"><div id="name"></div></td>
+			</tr><tr>
+				<td><label for="fam">Фамилия</label></td>
+				<td><input type="text" id="fam"></td>
+			</tr><tr>
+				<td><label for="city">Город</label><br>
+		        <td><input type="text" id="city"/>
+			</tr><tr>
+				<td><label for="date">Дата</label></td>
+				<td><input type="text" class="from-control" id="date"></td>
+			</tr><tr>
+				<td><label for="slider">Кол-во</label></td>
+				<td><input type="text" name="num" class="form-control" id="num" value='1'></td>
+			</tr><tr>
+				<td colspan="2"><div id="slider"></div></td>
+			</tr><tr>
+				<td><label for="price">Цена</label></td>
+				<td><input type="text" id="price"></td>
+			</tr>
+		</table>
+		<button class='open_otvet' id='open_otvet' value='1'>Оформить</button>
+	</div>
+
+	<div id="otvet" title="Ваш заказ оформлен">
+		<table cellpadding="5" width="100%">
+			<tr>
+				<td><label for="text">Фамилия</label></td>
+				<td><div id="fam_rez"></td>
+			</tr><tr>
+				<td><label for="city_rez">Город</label></td>
+				<td><div id="city_rez"></td>
+			</tr><tr>
+				<td colspan="2"><div id="name_rez"></div></td>
+			</tr><tr>
+				<td><label for="date">Дата</label>
+				<td><div id="date_rez"></td>
+			</tr><tr>
+				<td><label for="slider">Кол-во</label></td>
+				<td><div id="num_rez"></td>
+			</tr><tr>
+				<td><label for="price_rez">Итого:</label></td>
+				<td><div id="price_rez"></td>
+			</tr>
+		</table>
+		<button class='close' id='close' value='1'>ОК</button>
+		</div>
+<div id="accordion">
+        <h3>Уфа</h3>
+            <div></div>
+        <h3>Казань</h3>
+            <div></div>
+        <h3>Москва</h3>
+            <div></div>
+</div>
+
+<script>
+$(function() {
+    let tit = [];
+    let img = [];
+    let pri = [];
+    var rez;
+
+    $.getJSON('temnik.json', function(data) {
+        for (var i = 0; i < 2; i++) {
+            tit[i] = data.users[i].title;
+            img[i] = data.users[i].image;
+            pri[i] = data.users[i].text;
+
+            $('#comment').append("<p><table cellpadding='5' width='80%'>"+
+			"<tr><th>"+tit[i]+"</th></tr>"+
+            "<tr><td>"+"<img src='" + img[i] + "'>"+"</div></td></tr>"+
+            "<tr><td>"+"<button class='open_kypit' id='open_kypit" + i + "' value = '" + i + "'>Купить</button>"+"</td></tr></table></p>");
+        }
+    });
+
+    $("#kypit").dialog();
+    $("body").on('click', '.open_kypit', function() {
+        $("#kypit").dialog("open");
+        $("#price").val(pri[$(this).val()]);
+        $('#name').empty();
+        $('#name').append(tit[$(this).val()]);
+        rez = ($("#price").val() * $("#num").val());
+        console.log(rez);
+        return false;
+    });
+    
+    $("#otvet").dialog();
+    
+    $(".open_otvet").on('click', function() {
+        $("#otvet").dialog("open");
+    });
+    
+    $(".close").on('click', function() {
+        $("#otvet").dialog("close");
+    });
+    
+    $("body").on('click', '.open_otvet', function() {
+
+        console.log(rez);
+        $("#price_rez").text(rez);
+        $('#num_rez').text($('#num').val());
+        $('#fam_rez').text($('#fam').val());
+        $('#date_rez').text($('#date').val());
+        $('#city_rez').text($('#city').val());
+        $('#name_rez').text(tit[$(this).val()]);
+        
+        $("#kypit").dialog("close");
+        return false;
+    });
+
+});
+
+$(function() {
+    $('#city').autocomplete({
+        source: ['Москва', 'Уфа', 'Казань', "Ростов", "Санкт Петербург", "Екатеринбург", "Пермь", "Новосибирск", "Омск"]
+    });
+});
+
+$('#slider').slider({
+    range: "min",
+    min: 1,
+    max: 10,
+    step: 1,
+    values: [1],
+    slide: function(event, ui) {
+        $('#num').val(ui.values[0]);
+    }
+});
+
+$("#accordion").accordion({
+	collapsible: true
+});
+
+$("#date").datepicker({
+    minDate: 0,
+});
+</script>
+</body>
+</html>
